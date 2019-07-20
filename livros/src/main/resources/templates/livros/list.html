@@ -8,7 +8,7 @@
 		<table>
 			<tr th:each="livro : ${listaLivros}">
 				<td th:text="${livro.id}">1</td>
-				<td><a href="#" th:href="@{'/livros/'+${livro.id}}" th:text="${livro.nome}"> Título </a></td>
+				<td><a href="#" th:href="@{'/livros/alterar/'+${livro.id}}" th:text="${livro.nome}"> Título </a></td>
 			</tr>
 		</table>
 	</body>
