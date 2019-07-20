@@ -1,47 +1,55 @@
 package br.biblioteca.livros.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.biblioteca.livros.entidades.Autor;
+import br.biblioteca.livros.entidades.Livro;
+import br.biblioteca.livros.service.AutorService;
 
 @Controller
 public class AutorController {
 	
+	@Autowired
+	AutorService autorService;
+	
 	@RequestMapping("autor/list")
 	public ModelAndView list()
 	{
-		System.out.println("Listei os Autores");
-		return new ModelAndView("/autores/list");
+		Iterable<Autor> autores = autorService.listarAutores();
+		return new ModelAndView( "autores/list" , "listaAutores" , autores);
 	}
 	
 	@RequestMapping("autor/novo")
 	public ModelAndView newBook()
 	{
-		System.out.println("Criei um novo Autor");
-		return new ModelAndView("/autores/autor");
+		ModelAndView modelAndView = new ModelAndView("auores/autor");
+		return modelAndView;
 	}
 	
 	@RequestMapping("/autor/alterar/{id}")
 	public ModelAndView update(@PathVariable("id") Long id)
 	{
-		System.out.println("Autor alterado");
-		return new ModelAndView("redirect:/autores/list");
+		Autor autor = autorService.buscarAutor(id);
+		ModelAndView modelAndView = new ModelAndView("autores/form");
+		modelAndView.addObject("autores", autor);
+		return modelAndView;
 	}
 	
 	@RequestMapping("/autor/excluir/{id}")
 	public ModelAndView delete(@PathVariable("id") Long id)
 	{
-		System.out.println("Autor excluido");
+		autorService.apagarAutor(id);
 		return new ModelAndView("redirect:/autores/list");
 	}
 	
 	@RequestMapping(value = "/autor/gravar")
 	public ModelAndView create(Autor autor)
 	{
-		System.out.println("Autor salvo");
+		autorService.salvaAutor(autor);
 		return new ModelAndView("redirect:/autores/list");
 	}
 
